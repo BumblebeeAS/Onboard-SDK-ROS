@@ -179,6 +179,12 @@ DJISDKNode::droneTaskCallback(dji_sdk::DroneTaskControl::Request&  request,
     ack = vehicle->control->goHome(WAIT_TIMEOUT);
     ROS_DEBUG("called vehicle->control->goHome()");
   }
+  else if (request.task == 9)
+  {
+    // gohome
+    ack = vehicle->control->forceLand(WAIT_TIMEOUT);
+    ROS_DEBUG("called vehicle->control->forceLand()");
+  }
   else
   {
     ROS_WARN("unknown request task in droneTaskCallback");
