@@ -298,9 +298,15 @@ DJISDKNode::initPublisher(ros::NodeHandle& nh)
 
   local_position_publisher =
       nh.advertise<geometry_msgs::PointStamped>("dji_sdk/local_position", 10);
+  
+  local_position_aligned_publisher =
+      nh.advertise<geometry_msgs::PointStamped>("dji_sdk/local_position_aligned", 10);
 
   local_frame_ref_publisher =
       nh.advertise<sensor_msgs::NavSatFix>("dji_sdk/local_frame_ref", 10, true);
+
+  local_frame_ref_yaw_publisher =
+      nh.advertise<std_msgs::Float32>("dji_sdk/local_frame_ref_yaw", 10, true);
 
   time_sync_nmea_publisher =
       nh.advertise<nmea_msgs::Sentence>("dji_sdk/time_sync_nmea_msg", 10);

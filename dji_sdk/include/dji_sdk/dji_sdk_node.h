@@ -380,7 +380,10 @@ private:
   ros::Publisher flight_anomaly_publisher;
   //! Local Position Publisher (Publishes local position in ENU frame)
   ros::Publisher local_position_publisher;
+  // Local Position Publisher (Publishes local position in local ref frame)
+  ros::Publisher local_position_aligned_publisher;
   ros::Publisher local_frame_ref_publisher;
+  ros::Publisher local_frame_ref_yaw_publisher;
   ros::Publisher time_sync_nmea_publisher;
   ros::Publisher time_sync_gps_utc_publisher;
   ros::Publisher time_sync_fc_utc_publisher;
@@ -450,8 +453,8 @@ private:
                      double gps_t_lon, double gps_t_lat,
                      double gps_r_lon, double gps_r_lat);
 
-  double local_pos_ref_latitude, local_pos_ref_longitude, local_pos_ref_altitude;
-  double current_gps_latitude, current_gps_longitude, current_gps_altitude;
+  double local_pos_ref_latitude, local_pos_ref_longitude, local_pos_ref_altitude, local_pos_ref_yaw;
+  double current_gps_latitude, current_gps_longitude, current_gps_altitude, current_yaw;
   int current_gps_health;
   bool rtkSupport;
 };

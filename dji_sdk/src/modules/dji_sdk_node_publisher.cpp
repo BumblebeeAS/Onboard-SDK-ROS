@@ -73,6 +73,9 @@ DJISDKNode::dataBroadcastCallback()
     q.quaternion.y = q_FLU2ENU.getY();
     q.quaternion.z = q_FLU2ENU.getZ();
 
+    double unused;
+    tf::Matrix3x3(q_FLU2ENU).getRPY(unused, unused, this->current_yaw);
+
     attitude_publisher.publish(q);
   }
 
@@ -138,6 +141,16 @@ DJISDKNode::dataBroadcastCallback()
       */
 
       this->local_position_publisher.publish(local_pos);
+
+      // also publish the local position, aligned to the yaw of the ref frame
+      geometry_msgs::PointStamped local_pos_aligned;
+      local_pos_aligned.header.frame_id = "/local_aligned";
+      local_pos_aligned.header.stamp = now_time;
+      local_pos_aligned.point.x = local_pos.point.x * std::cos(this->local_pos_ref_yaw) - local_pos.point.y * std::sin(this->local_pos_ref_yaw);
+      local_pos_aligned.point.y = local_pos.point.x * std::sin(this->local_pos_ref_yaw) + local_pos.point.y * std::cos(this->local_pos_ref_yaw);
+      local_pos_aligned.point.z = local_pos.point.z;
+
+      this->local_position_aligned_publisher.publish(local_pos_aligned);
     }
 
     std_msgs::Float32 agl_height;
@@ -367,6 +380,16 @@ DJISDKNode::publish50HzData(Vehicle* vehicle, RecvContainer recvFrame,
    *       in ENU Frame
    */
     p->local_position_publisher.publish(local_pos);
+
+    // also publish the local position, aligned to the yaw of the ref frame
+    geometry_msgs::PointStamped local_pos_aligned;
+    local_pos_aligned.header.frame_id = "/local_aligned";
+    local_pos_aligned.header.stamp = gps_pos.header.stamp;
+    local_pos_aligned.point.x = local_pos.point.x * std::cos(p->local_pos_ref_yaw) - local_pos.point.y * std::sin(p->local_pos_ref_yaw);
+    local_pos_aligned.point.y = local_pos.point.x * std::sin(p->local_pos_ref_yaw) + local_pos.point.y * std::cos(p->local_pos_ref_yaw);
+    local_pos_aligned.point.z = local_pos.point.z;
+
+    p->local_position_aligned_publisher.publish(local_pos_aligned);
   }
 
   Telemetry::TypeMap<Telemetry::TOPIC_HEIGHT_FUSION>::type fused_height =
@@ -586,6 +609,10 @@ DJISDKNode::publish100HzData(Vehicle *vehicle, RecvContainer recvFrame,
   q.quaternion.x = q_FLU2ENU.getX();
   q.quaternion.y = q_FLU2ENU.getY();
   q.quaternion.z = q_FLU2ENU.getZ();
+
+  double unused;
+  tf::Matrix3x3(q_FLU2ENU).getRPY(unused, unused, p->current_yaw);
+
   p->attitude_publisher.publish(q);
 
   Telemetry::TypeMap<Telemetry::TOPIC_ANGULAR_RATE_FUSIONED>::type w_FC =

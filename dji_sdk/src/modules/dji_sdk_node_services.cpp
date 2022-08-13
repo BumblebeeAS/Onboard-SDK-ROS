@@ -130,16 +130,20 @@ DJISDKNode::setLocalPosRefCallback(dji_sdk::SetLocalPosRef::Request &request,
     local_pos_ref_latitude = current_gps_latitude;
     local_pos_ref_longitude = current_gps_longitude;
     local_pos_ref_altitude = current_gps_altitude;
+    local_pos_ref_yaw = current_yaw;
     ROS_INFO("Local Position reference has been set.");
     ROS_INFO("MONITOR GPS HEALTH WHEN USING THIS TOPIC");
     local_pos_ref_set = true;
 
     // Create message to publish to a topic
     sensor_msgs::NavSatFix localFrameLLA;
+    std_msgs::Float32 localFrameYaw;
     localFrameLLA.latitude = local_pos_ref_latitude;
     localFrameLLA.longitude = local_pos_ref_longitude;
     localFrameLLA.altitude = local_pos_ref_altitude;
+    localFrameYaw.data = local_pos_ref_yaw;
     local_frame_ref_publisher.publish(localFrameLLA);
+    local_frame_ref_yaw_publisher.publish(localFrameYaw);
 
     response.result = true;
   }
