@@ -235,6 +235,9 @@ DJISDKNode::initPublisher(ros::NodeHandle& nh)
 
   attitude_publisher =
     nh.advertise<geometry_msgs::QuaternionStamped>("dji_sdk/attitude", 10);
+  
+  yaw_publisher =
+    nh.advertise<std_msgs::Float32>("dji_sdk/yaw", 10);
 
   battery_state_publisher =
     nh.advertise<sensor_msgs::BatteryState>("dji_sdk/battery_state",10);

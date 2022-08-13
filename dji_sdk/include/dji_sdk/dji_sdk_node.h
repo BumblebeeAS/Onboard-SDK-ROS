@@ -354,6 +354,7 @@ private:
   ros::Subscriber gimbal_speed_cmd_subscriber;
   //! telemetry data publisher
   ros::Publisher attitude_publisher;
+  ros::Publisher yaw_publisher;
   ros::Publisher angularRate_publisher;
   ros::Publisher acceleration_publisher;
   ros::Publisher battery_state_publisher;

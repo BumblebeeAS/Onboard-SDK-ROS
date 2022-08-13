@@ -73,10 +73,15 @@ DJISDKNode::dataBroadcastCallback()
     q.quaternion.y = q_FLU2ENU.getY();
     q.quaternion.z = q_FLU2ENU.getZ();
 
-    double unused;
-    tf::Matrix3x3(q_FLU2ENU).getRPY(unused, unused, this->current_yaw);
+    double unused, yaw;
+    tf::Matrix3x3(q_FLU2ENU).getRPY(unused, unused, yaw);
+    this->current_yaw = yaw;
+
+    std_msgs::Float32 yaw_msg;
+    yaw_msg.data = yaw;
 
     attitude_publisher.publish(q);
+    yaw_publisher.publish(yaw_msg);
   }
 
   if ( (data_enable_flag & DataBroadcast::DATA_ENABLE_FLAG::HAS_Q) &&
@@ -610,10 +615,15 @@ DJISDKNode::publish100HzData(Vehicle *vehicle, RecvContainer recvFrame,
   q.quaternion.y = q_FLU2ENU.getY();
   q.quaternion.z = q_FLU2ENU.getZ();
 
-  double unused;
-  tf::Matrix3x3(q_FLU2ENU).getRPY(unused, unused, p->current_yaw);
+  double unused, yaw;
+  tf::Matrix3x3(q_FLU2ENU).getRPY(unused, unused, yaw);
+  p->current_yaw = yaw;
+
+  std_msgs::Float32 yaw_msg;
+  yaw_msg.data = yaw;
 
   p->attitude_publisher.publish(q);
+  p->yaw_publisher.publish(yaw_msg);
 
   Telemetry::TypeMap<Telemetry::TOPIC_ANGULAR_RATE_FUSIONED>::type w_FC =
     vehicle->subscribe->getValue<Telemetry::TOPIC_ANGULAR_RATE_FUSIONED>();
