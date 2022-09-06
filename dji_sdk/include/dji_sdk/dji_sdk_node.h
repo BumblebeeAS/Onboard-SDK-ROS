@@ -135,6 +135,9 @@ private:
 
   void flightControlPxPyPzYawCallback(
     const sensor_msgs::Joy::ConstPtr& pMsg);
+  
+  void flightControlPxPyPzYawDegCallback(
+    const sensor_msgs::Joy::ConstPtr& pMsg);
 
   void flightControlVxVyVzYawrateCallback(
     const sensor_msgs::Joy::ConstPtr& pMsg);
@@ -346,6 +349,7 @@ private:
   ros::Subscriber flight_control_sub;
 
   ros::Subscriber flight_control_position_yaw_sub;
+  ros::Subscriber flight_control_position_yaw_deg_sub;
   ros::Subscriber flight_control_velocity_yawrate_sub;
   ros::Subscriber flight_control_rollpitch_yawrate_vertpos_sub;
 
@@ -383,6 +387,8 @@ private:
   ros::Publisher local_position_publisher;
   // Local Position Publisher (Publishes local position in local ref frame)
   ros::Publisher local_position_aligned_publisher;
+  // Local Yaw Publisher (Publishes yaw in local ref frame)
+  ros::Publisher yaw_aligned_publisher;
   ros::Publisher local_frame_ref_publisher;
   ros::Publisher local_frame_ref_yaw_publisher;
   ros::Publisher time_sync_nmea_publisher;

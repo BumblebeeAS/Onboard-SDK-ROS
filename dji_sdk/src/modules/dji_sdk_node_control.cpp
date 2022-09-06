@@ -10,6 +10,7 @@
  */
 
 #include <dji_sdk/dji_sdk_node.h>
+#include <cmath>
 
 /*!
  * @brief The flight controller takes control signals with frame convention:
@@ -142,6 +143,24 @@ DJISDKNode::flightControlPxPyPzYawCallback(
   float py    = pMsg->axes[1];
   float pz    = pMsg->axes[2];
   float yaw   = pMsg->axes[3];
+
+  flightControl(flag, px, py, pz, yaw);
+}
+
+void 
+DJISDKNode::flightControlPxPyPzYawDegCallback(
+    const sensor_msgs::Joy::ConstPtr& pMsg)
+{
+  uint8_t flag = (Control::VERTICAL_POSITION |
+                  Control::HORIZONTAL_POSITION |
+                  Control::YAW_ANGLE |
+                  Control::HORIZONTAL_GROUND |
+                  Control::STABLE_ENABLE);
+
+  float px    = pMsg->axes[0];
+  float py    = pMsg->axes[1];
+  float pz    = pMsg->axes[2];
+  float yaw   = pMsg->axes[3] / 180.0 * M_PI;
 
   flightControl(flag, px, py, pz, yaw);
 }

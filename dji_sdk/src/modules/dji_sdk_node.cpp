@@ -184,6 +184,11 @@ DJISDKNode::initFlightControl(ros::NodeHandle& nh)
     nh.subscribe<sensor_msgs::Joy>(
       "dji_sdk/flight_control_setpoint_ENUposition_yaw", 10,
       &DJISDKNode::flightControlPxPyPzYawCallback, this);
+  
+  flight_control_position_yaw_deg_sub =
+    nh.subscribe<sensor_msgs::Joy>(
+      "dji_sdk/flight_control_setpoint_ENUposition_yaw_deg", 10,
+      &DJISDKNode::flightControlPxPyPzYawDegCallback, this);
 
   flight_control_velocity_yawrate_sub =
     nh.subscribe<sensor_msgs::Joy>(
@@ -238,6 +243,9 @@ DJISDKNode::initPublisher(ros::NodeHandle& nh)
   
   yaw_publisher =
     nh.advertise<std_msgs::Float32>("dji_sdk/yaw", 10);
+
+  yaw_aligned_publisher =
+    nh.advertise<std_msgs::Float32>("dji_sdk/yaw_aligned", 10);
 
   battery_state_publisher =
     nh.advertise<sensor_msgs::BatteryState>("dji_sdk/battery_state",10);

@@ -78,10 +78,22 @@ DJISDKNode::dataBroadcastCallback()
     this->current_yaw = yaw;
 
     std_msgs::Float32 yaw_msg;
-    yaw_msg.data = yaw;
+    yaw_msg.data = yaw / M_PI * 180.0;
 
     attitude_publisher.publish(q);
     yaw_publisher.publish(yaw_msg);
+
+    if(local_pos_ref_set)
+    {
+      std_msgs::Float32 yaw_aligned_msg;
+      yaw_aligned_msg.data = (yaw - this->local_pos_ref_yaw) / M_PI * 180.0;
+      if (yaw_aligned_msg.data < -180.0) 
+      {
+        yaw_aligned_msg.data += 360.0;
+      }
+
+      yaw_aligned_publisher.publish(yaw_aligned_msg);
+    }
   }
 
   if ( (data_enable_flag & DataBroadcast::DATA_ENABLE_FLAG::HAS_Q) &&
@@ -620,10 +632,22 @@ DJISDKNode::publish100HzData(Vehicle *vehicle, RecvContainer recvFrame,
   p->current_yaw = yaw;
 
   std_msgs::Float32 yaw_msg;
-  yaw_msg.data = yaw;
+  yaw_msg.data = yaw / M_PI * 180.0;
 
   p->attitude_publisher.publish(q);
   p->yaw_publisher.publish(yaw_msg);
+
+  if(p->local_pos_ref_set)
+  {
+    std_msgs::Float32 yaw_aligned_msg;
+    yaw_aligned_msg.data = (yaw - p->local_pos_ref_yaw) / M_PI * 180.0;
+    if (yaw_aligned_msg.data < -180.0) 
+    {
+      yaw_aligned_msg.data += 360.0;
+    }
+
+    p->yaw_aligned_publisher.publish(yaw_aligned_msg);
+  }
 
   Telemetry::TypeMap<Telemetry::TOPIC_ANGULAR_RATE_FUSIONED>::type w_FC =
     vehicle->subscribe->getValue<Telemetry::TOPIC_ANGULAR_RATE_FUSIONED>();
