@@ -183,6 +183,23 @@ DJISDKNode::flightControlVxVyVzYawrateCallback(
 }
 
 void
+DJISDKNode::flightControlVxVyVzYawrateDegCallback(
+  const sensor_msgs::Joy::ConstPtr& pMsg)
+{
+  uint8_t flag = (Control::VERTICAL_VELOCITY |
+                  Control::HORIZONTAL_VELOCITY |
+                  Control::YAW_RATE |
+                  Control::HORIZONTAL_GROUND |
+                  Control::STABLE_ENABLE);
+  float vx        = pMsg->axes[0];
+  float vy        = pMsg->axes[1];
+  float vz        = pMsg->axes[2];
+  float yawRate   = pMsg->axes[3] / 180.0 * M_PI;
+
+  flightControl(flag, vx, vy, vz, yawRate);
+}
+
+void
 DJISDKNode::flightControlRollPitchPzYawrateCallback(
   const sensor_msgs::Joy::ConstPtr& pMsg)
 {

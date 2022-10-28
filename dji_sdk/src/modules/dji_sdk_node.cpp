@@ -194,6 +194,11 @@ DJISDKNode::initFlightControl(ros::NodeHandle& nh)
     nh.subscribe<sensor_msgs::Joy>(
       "dji_sdk/flight_control_setpoint_ENUvelocity_yawrate", 10,
       &DJISDKNode::flightControlVxVyVzYawrateCallback, this);
+  
+  flight_control_velocity_yawrate_deg_sub =
+    nh.subscribe<sensor_msgs::Joy>(
+      "dji_sdk/flight_control_setpoint_ENUvelocity_yawrate_deg", 10,
+      &DJISDKNode::flightControlVxVyVzYawrateDegCallback, this);
 
   flight_control_rollpitch_yawrate_vertpos_sub =
     nh.subscribe<sensor_msgs::Joy>(

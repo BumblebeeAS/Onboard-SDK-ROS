@@ -142,6 +142,9 @@ private:
   void flightControlVxVyVzYawrateCallback(
     const sensor_msgs::Joy::ConstPtr& pMsg);
 
+  void flightControlVxVyVzYawrateDegCallback(
+    const sensor_msgs::Joy::ConstPtr& pMsg);
+
   void flightControlRollPitchPzYawrateCallback(
     const sensor_msgs::Joy::ConstPtr& pMsg);
 
@@ -351,6 +354,7 @@ private:
   ros::Subscriber flight_control_position_yaw_sub;
   ros::Subscriber flight_control_position_yaw_deg_sub;
   ros::Subscriber flight_control_velocity_yawrate_sub;
+  ros::Subscriber flight_control_velocity_yawrate_deg_sub;
   ros::Subscriber flight_control_rollpitch_yawrate_vertpos_sub;
 
   //! general subscribers
